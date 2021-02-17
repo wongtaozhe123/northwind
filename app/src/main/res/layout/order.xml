@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+<!--    <ImageView-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="33dp"-->
+<!--        android:layout_centerHorizontal="true"-->
+<!--        android:layout_gravity="center_vertical"-->
+<!--        android:layout_marginStart="@android:dimen/thumbnail_width"-->
+<!--        android:layout_marginTop="@android:dimen/thumbnail_width"-->
+<!--        android:layout_marginEnd="@android:dimen/thumbnail_width"-->
+<!--        android:layout_marginBottom="@android:dimen/thumbnail_width"-->
+<!--        android:src="@drawable/myself_ori" />-->
+
+    <ListView
+        android:id="@+id/listview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textColor="@color/black"/>
+
+
+</RelativeLayout>

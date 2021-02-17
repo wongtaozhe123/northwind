@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">northwind</string>
+    <string name="button">click here</string>
+</resources>
