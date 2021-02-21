@@ -25,6 +25,7 @@ public class ProductChoice extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i= new Intent(getApplicationContext(), Order.class);
+                i.putExtra("category",1);
                 startActivity(i);
             }
         });
@@ -32,6 +33,7 @@ public class ProductChoice extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i= new Intent(getApplicationContext(), Order.class);
+                i.putExtra("category",2);
                 startActivity(i);
             }
         });
@@ -39,6 +41,7 @@ public class ProductChoice extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i= new Intent(getApplicationContext(), Order.class);
+                i.putExtra("category",3);
                 startActivity(i);
             }
         });
@@ -46,6 +49,7 @@ public class ProductChoice extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i= new Intent(getApplicationContext(), Order.class);
+                i.putExtra("category",4);
                 startActivity(i);
             }
         });
@@ -53,6 +57,7 @@ public class ProductChoice extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i= new Intent(getApplicationContext(), Order.class);
+                i.putExtra("category",5);
                 startActivity(i);
             }
         });
@@ -60,6 +65,7 @@ public class ProductChoice extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i= new Intent(getApplicationContext(), Order.class);
+                i.putExtra("category",6);
                 startActivity(i);
             }
         });
@@ -67,6 +73,7 @@ public class ProductChoice extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i= new Intent(getApplicationContext(), Order.class);
+                i.putExtra("category",7);
                 startActivity(i);
             }
         });
@@ -74,6 +81,7 @@ public class ProductChoice extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i= new Intent(getApplicationContext(), Order.class);
+                i.putExtra("category",8);
                 startActivity(i);
             }
         });

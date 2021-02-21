@@ -47,6 +47,8 @@ public class Order extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.order);
         ListView listView=findViewById(R.id.listview);
+        int category=getIntent().getIntExtra("category",0);
+        Log.d("aaa", String.valueOf(category));
 
         app.currentUser().logOutAsync(logout->{
             Credentials credentials=Credentials.emailPassword("wongtaozhelgd@gmail.com","taozhe");

@@ -10,7 +10,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Northwind">
-        <activity android:name=".Order">
+        <activity android:name=".ProductChoice">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -18,7 +18,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainActivity"/>
-        <activity android:name=".ProductChoice"/>
+        <activity android:name=".Order"/>
     </application>
 
 </manifest>
