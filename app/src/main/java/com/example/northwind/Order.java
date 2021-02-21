@@ -91,10 +91,11 @@ public class Order extends AppCompatActivity{
 //                                    listView.setAdapter(new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, arrayList));
                                     ProgramAdapter programAdapter=new ProgramAdapter(Order.this,arrayList,arrayList1);
                                     listView.setAdapter(programAdapter);
+                                    progressBar.setVisibility(View.INVISIBLE);
                                 }catch (Exception e){
                                     Log.d("aaa",e.toString());
                                 }
-
+//                                progressBar.setVisibility(View.INVISIBLE);
                                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                     @Override
                                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -106,7 +107,6 @@ public class Order extends AppCompatActivity{
                                 Log.d("aaa",task.getError().toString());
                             }
                         });
-                        progressBar.setVisibility(View.INVISIBLE);
                     }
                     else{
                         Log.d("aaa","Login error");
