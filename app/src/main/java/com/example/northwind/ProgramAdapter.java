@@ -38,8 +38,8 @@ public class ProgramAdapter extends ArrayAdapter<String> {
         else{
             holder= (ProgramViewHolder) singleItem.getTag();
         }
-        holder.foodName.setText(foodName.get(position));
-        holder.foodPrice.setText(String.valueOf(foodPrice.get(position)));
+        holder.foodName.setText("~ "+foodName.get(position)+" ~");
+        holder.foodPrice.setText("~ RM"+ foodPrice.get(position) +" ~");
         singleItem.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {

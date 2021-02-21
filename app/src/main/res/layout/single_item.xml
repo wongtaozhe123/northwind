@@ -22,6 +22,7 @@
             android:layout_centerHorizontal="true"
             android:gravity="center"
             android:text="Food name"
+            android:fontFamily="sans-serif-medium"
             android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="25sp" />
@@ -36,10 +37,13 @@
             android:gravity="center"
             android:text="price"
             android:textColor="@color/black"
+            android:fontFamily="serif-monospace"
             android:textSize="20sp" />
         <View
             android:layout_width="match_parent"
-            android:layout_height="2dp"
+            android:layout_height="1dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:background="@color/black"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"/>
