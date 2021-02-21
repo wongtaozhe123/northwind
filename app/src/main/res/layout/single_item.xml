@@ -39,6 +39,7 @@
             android:textColor="@color/black"
             android:fontFamily="serif-monospace"
             android:textSize="20sp" />
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"

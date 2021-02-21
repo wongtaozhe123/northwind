@@ -43,7 +43,7 @@ public class ProgramAdapter extends ArrayAdapter<String> {
         singleItem.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                Toast.makeText(getContext(),"YOu choosed "+foodName.get(position),Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(),foodName.get(position)+" added to cart!!",Toast.LENGTH_SHORT).show();
             }
         });
         return singleItem;
