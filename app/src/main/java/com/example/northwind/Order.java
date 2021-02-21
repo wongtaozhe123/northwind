@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,22 +41,22 @@ public class Order extends AppCompatActivity{
         Realm.init(this);
         App app=new App(new AppConfiguration.Builder(Appid).build());
         ArrayList<String> arrayList=new ArrayList<>();
-//        arrayList.add("Tao");
-//        arrayList.add("Zhe");
-//        arrayList.add("legend");
-//        arrayList.add("football");
+        ArrayList<Integer> arrayList1=new ArrayList();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.order);
+
         ListView listView=findViewById(R.id.listview);
+        ProgressBar progressBar=findViewById(R.id.progressBar);
+
         int category=getIntent().getIntExtra("category",0);
         Log.d("aaa", String.valueOf(category));
 
-        app.currentUser().logOutAsync(logout->{
             Credentials credentials=Credentials.emailPassword("wongtaozhelgd@gmail.com","taozhe");
             app.loginAsync(credentials, new App.Callback<User>(){
                 @Override
                 public void onResult(App.Result<User> result) {
                     if(result.isSuccess()){
+                        progressBar.setVisibility(View.VISIBLE);
                         user=app.currentUser();
                         mongoClient = user.getMongoClient("mongodb-atlas");
                         mongoDatabase=mongoClient.getDatabase("northwind");
@@ -80,12 +81,16 @@ public class Order extends AppCompatActivity{
                                     if(currentDoc.getString("name")!=null){
 //                                        Log.d("aaa",currentDoc.toString());
                                         Log.d("aaa",currentDoc.getString("name"));
+                                        Log.d("aaa", String.valueOf(currentDoc.getInteger("id")));
                                         arrayList.add(currentDoc.getString("name"));
+                                        arrayList1.add(currentDoc.getInteger("id"));
                                     }
                                 }
                                 try{
-                                    ArrayAdapter<String> arrayAdapter=new ArrayAdapter<String>(Order.this, android.R.layout.simple_list_item_1,arrayList);
-                                    listView.setAdapter(new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, arrayList));
+//                                    ArrayAdapter<String> arrayAdapter=new ArrayAdapter<String>(Order.this, android.R.layout.simple_list_item_1,arrayList);
+//                                    listView.setAdapter(new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, arrayList));
+                                    ProgramAdapter programAdapter=new ProgramAdapter(Order.this,arrayList,arrayList1);
+                                    listView.setAdapter(programAdapter);
                                 }catch (Exception e){
                                     Log.d("aaa",e.toString());
                                 }
@@ -101,6 +106,7 @@ public class Order extends AppCompatActivity{
                                 Log.d("aaa",task.getError().toString());
                             }
                         });
+                        progressBar.setVisibility(View.INVISIBLE);
                     }
                     else{
                         Log.d("aaa","Login error");
@@ -108,7 +114,6 @@ public class Order extends AppCompatActivity{
                     }
                 }
             });
-        });
 
     }
 
