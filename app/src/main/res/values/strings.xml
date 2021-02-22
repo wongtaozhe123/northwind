@@ -2,4 +2,6 @@
     <string name="app_name">northwind</string>
     <string name="button">click here</string>
     <string name="username">email@domain.com</string>
+    <string name="register">Register</string>
+    <string name="password">Password</string>
 </resources>
