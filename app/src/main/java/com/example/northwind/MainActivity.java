@@ -1,10 +1,11 @@
 package com.example.northwind;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -12,9 +13,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.bson.Document;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.ArrayList;
+import org.bson.Document;
 
 import io.realm.Realm;
 import io.realm.mongodb.App;
@@ -37,7 +39,21 @@ public class MainActivity extends AppCompatActivity {
         EditText username = findViewById(R.id.input_ID);
         EditText password = findViewById(R.id.input_PW);
         Button button2 = findViewById(R.id.btn_login);
-        Button buttonN = findViewById(R.id.navigate);
+        TextView registerText = findViewById(R.id.txt_register);
+
+        SpannableString ss = new SpannableString(registerText.getText().toString());
+        ClickableSpan span1 = new ClickableSpan() {
+            @Override
+            public void onClick(@NonNull View widget) {
+                Intent i = new Intent(getApplicationContext(), RegisterActivity.class);
+                startActivity(i);
+            }
+        };
+
+        ss.setSpan(span1, 23, 36 , Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        registerText.setText(ss);
+        registerText.setMovementMethod(LinkMovementMethod.getInstance());
+
 
         Intent intent = getIntent();
         String r_username = intent.getStringExtra("username");
@@ -47,21 +63,14 @@ public class MainActivity extends AppCompatActivity {
         Realm.init(this);
         Realm realm = Realm.getDefaultInstance();
         App app = new App(new AppConfiguration.Builder("northwind-noimz").build());
-        buttonN.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(getApplicationContext(), RegisterActivity.class);
-                startActivity(i);
-            }
-        });
+
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (username.getText() != null && password.getText() != null) {
                     Toast.makeText(getApplicationContext(), "Please fill in your email and password !", Toast.LENGTH_LONG).show();
                     Log.d("aaa", "Login failed");
-                }
-                else{
+                } else {
                     Credentials credentials = Credentials.emailPassword(String.valueOf(username.getText()), String.valueOf(password.getText()));
                     app.loginAsync(credentials, new App.Callback<User>() {
                         @Override
