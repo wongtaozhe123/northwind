@@ -1,13 +1,16 @@
- package com.example.northwind;
+package com.example.northwind;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.bson.Document;
 
@@ -17,13 +20,10 @@ import io.realm.Realm;
 import io.realm.mongodb.App;
 import io.realm.mongodb.AppConfiguration;
 import io.realm.mongodb.Credentials;
-import io.realm.mongodb.RealmResultTask;
 import io.realm.mongodb.User;
 import io.realm.mongodb.mongo.MongoClient;
 import io.realm.mongodb.mongo.MongoCollection;
 import io.realm.mongodb.mongo.MongoDatabase;
-import io.realm.mongodb.mongo.iterable.FindIterable;
-import io.realm.mongodb.mongo.iterable.MongoCursor;
 
 public class MainActivity extends AppCompatActivity {
     MongoClient mongoClient;
@@ -34,39 +34,50 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        EditText num1=findViewById(R.id.num1);
-        EditText num2=findViewById(R.id.num2);
-        TextView name=findViewById(R.id.name);
-        Button button2=findViewById(R.id.button2);
-        Button buttonN=findViewById(R.id.navigate);
-        ArrayList<String> strings=new ArrayList<>();
-
+        EditText username = findViewById(R.id.input_ID);
+        EditText password = findViewById(R.id.input_PW);
+        Button button2 = findViewById(R.id.btn_login);
+        Button buttonN = findViewById(R.id.navigate);
+        ArrayList<String> strings = new ArrayList<>();
+        Intent intent = getIntent();
+        String r_username = intent.getStringExtra("username");
+        if (r_username != null) {
+            username.setText(r_username);
+        }
         Realm.init(this);
         Realm realm = Realm.getDefaultInstance();
         App app = new App(new AppConfiguration.Builder("northwind-noimz").build());
-        buttonN.setOnClickListener(new View.OnClickListener(){
+        buttonN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i= new Intent(getApplicationContext(), Order.class);
+                Intent i = new Intent(getApplicationContext(), RegisterActivity.class);
                 startActivity(i);
             }
         });
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Credentials credentials=Credentials.emailPassword("wongtaozhelgd@gmail.com","taozhe");
+                Credentials credentials = Credentials.emailPassword(String.valueOf(username.getText()), String.valueOf(password.getText()));
+//                username.setText("Zchuen");
+//                password.setText("12345");
                 app.loginAsync(credentials, new App.Callback<User>() {
                     @Override
                     public void onResult(App.Result<User> result) {
-                        if(result.isSuccess()){
-                            Log.d("aaa","Login successful");
+                        if (result.isSuccess()) {
+                            Toast.makeText(getApplicationContext(), "Login Successful", Toast.LENGTH_LONG).show();
+                            Log.d("aaa", "Login successful");
                             User user = app.currentUser();
-                            mongoClient= user.getMongoClient("mongodb-atlas");
-                            mongoDatabase=mongoClient.getDatabase("northwind");
-                            mongoCollection=mongoDatabase.getCollection("customers");
-                            Document document=new Document("userId",user.getId());
-                            document.append("id",4);
-                            document.append("name","Myth");
+                            Log.d("User", String.valueOf(user));
+                            mongoClient = user.getMongoClient("mongodb-atlas");
+                            mongoDatabase = mongoClient.getDatabase("northwind");
+                            mongoCollection = mongoDatabase.getCollection("customers");
+                            Document document = new Document("userId", user.getId());
+                            document.append("id", 5);
+                            document.append("name", "Hi");
+                            Intent i = new Intent(getApplicationContext(), ProductChoice.class);
+                            i.putExtra("username", username.toString());
+                            startActivity(i);
+
 //                            mongoCollection.insertOne(document).getAsync(result1 -> {
 //                                if(result1.isSuccess()){
 //                                    Log.d("aaa","Data inserted?");
@@ -76,21 +87,23 @@ public class MainActivity extends AppCompatActivity {
 //                                    Log.d("aaa",result1.getError().toString());
 //                                }
 //                            });
-                            Document queryFilter=new Document().append("name","Myth");
+                            Document queryFilter = new Document().append("name", "Myth");
 //                            mongoCollection.findOne(queryFilter).getAsync(result1 -> {
 //                                if(result1.isSuccess()){
 //                                    Log.d("aaa","found it");
+//                                    Toast.makeText(getApplicationContext(),"Found",Toast.LENGTH_LONG).show();
 //                                    Document resultd= (Document) result1.get();
 //                                    Log.d("aaa", resultd.getString("name"));
-//                                }
+//                               }
 //                                else{
 //                                    Log.d("aaa","can't find");
 //                                    Log.d("aaa",result1.getError().toString());
 //                                }
-//                            });
-                        }
-                        else{
-                            Log.d("aaa","failed");
+//                           });
+
+                        } else {
+                            Document queryFilter = new Document().append("name", "Myth");
+                            Toast.makeText(getApplicationContext(), "Login failed ! Please provide correct username with password", Toast.LENGTH_LONG).show();
                         }
                     }
                 });
