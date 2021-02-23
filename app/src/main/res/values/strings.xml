@@ -8,6 +8,6 @@
     <string name="backToLogin">Already Have An Account? Login Here</string>
     <string name="logo">OurLogo</string>
     <string name="SignIn">Sign in</string>
-    <string name="LogInTitle">Login Page</string>
-    <string name="RegisterTitle">Registration Page</string>
+    <string name="LogInTitle">Login</string>
+    <string name="RegisterTitle">Registration</string>
 </resources>
