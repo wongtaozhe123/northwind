@@ -14,6 +14,7 @@
         android:ems="10"
         android:hint="@string/username"
         android:inputType="textPersonName"
+        android:singleLine="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -28,6 +29,7 @@
         android:ems="10"
         android:hint="@string/password"
         android:inputType="textPassword"
+        android:singleLine="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/input_username"
@@ -46,17 +48,6 @@
         app:layout_constraintTop_toBottomOf="@+id/input_password"
         android:textColor="@color/black"/>
 
-    <Button
-        android:id="@+id/btn_backToLogin"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        app:backgroundTint="#FF5722"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_Register"
-        android:text="@string/backToLogin"
-        android:textColor="@color/black"/>
-
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="360dp"
@@ -68,4 +59,25 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/logo" />
+
+    <TextView
+        android:id="@+id/txt_backToLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/backToLogin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_Register" />
+
+    <TextView
+        android:id="@+id/txt_RegisterTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:text="@string/RegisterTitle"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@+id/imageView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

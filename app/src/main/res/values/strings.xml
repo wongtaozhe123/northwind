@@ -2,9 +2,12 @@
     <string name="app_name">northwind</string>
     <string name="button">click here</string>
     <string name="username">email@domain.com</string>
+    <string name="noAccount">Don\'t Have An Account? Register Here</string>
     <string name="register">Register</string>
     <string name="password">Password</string>
-    <string name="backToLogin">Back To Login</string>
+    <string name="backToLogin">Already Have An Account? Login Here</string>
     <string name="logo">OurLogo</string>
     <string name="SignIn">Sign in</string>
+    <string name="LogInTitle">Login Page</string>
+    <string name="RegisterTitle">Registration Page</string>
 </resources>
