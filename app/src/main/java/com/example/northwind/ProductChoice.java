@@ -99,8 +99,10 @@ public class ProductChoice extends AppCompatActivity {
                     case R.id.order:
                         return true;
                     case R.id.cart:
+
                         startActivity(new Intent(getApplicationContext(), Cart.class));
                         overridePendingTransition(0,0);
+
                         return true;
                 }
                 return false;
