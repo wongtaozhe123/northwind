@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     MongoDatabase mongoDatabase;
     MongoCollection mongoCollection;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        ss.setSpan(span1, 23, 36 , Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        ss.setSpan(span1, 23, 36, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         registerText.setText(ss);
         registerText.setMovementMethod(LinkMovementMethod.getInstance());
 
@@ -67,33 +68,40 @@ public class MainActivity extends AppCompatActivity {
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (username.getText() != null && password.getText() != null) {
-                    Toast.makeText(getApplicationContext(), "Please fill in your email and password !", Toast.LENGTH_LONG).show();
+String ed_username = username.getText().toString();
+
+
+                if (username.getText().toString().isEmpty()) {
+                    Toast.makeText(getApplicationContext(), "Please fill in your email !", Toast.LENGTH_LONG).show();
                     Log.d("aaa", "Login failed");
-                } else {
-                    Credentials credentials = Credentials.emailPassword(String.valueOf(username.getText()), String.valueOf(password.getText()));
-                    app.loginAsync(credentials, new App.Callback<User>() {
-                        @Override
-                        public void onResult(App.Result<User> result) {
-                            if (result.isSuccess()) {
-                                Toast.makeText(getApplicationContext(), "Login Successful", Toast.LENGTH_LONG).show();
-                                Log.d("aaa", "Login successful");
-                                User user = app.currentUser();
-                                Log.d("User", String.valueOf(user));
-                                mongoClient = user.getMongoClient("mongodb-atlas");
-                                mongoDatabase = mongoClient.getDatabase("northwind");
-                                mongoCollection = mongoDatabase.getCollection("customers");
-                                Document document = new Document("userId", user.getId());
-                                document.append("id", 5);
-                                document.append("name", "Hi");
-                                Intent i = new Intent(getApplicationContext(), ProductChoice.class);
-                                i.putExtra("username", username.toString());
-                                startActivity(i);
-                            } else {
-                                Toast.makeText(getApplicationContext(), "Login failed ! Please provide correct username with password", Toast.LENGTH_LONG).show();
+
+                }
+                else if (password.getText().toString().isEmpty()) {
+                    Toast.makeText(getApplicationContext(), "Please fill in your password !", Toast.LENGTH_LONG).show();
+                    Log.d("aaa", "Login failed");}
+                else {
+                        Credentials credentials = Credentials.emailPassword(String.valueOf(username.getText()), String.valueOf(password.getText()));
+
+                        app.loginAsync(credentials, new App.Callback<User>() {
+                            @Override
+                            public void onResult(App.Result<User> result) {
+                                if (result.isSuccess()) {
+                                    Toast.makeText(getApplicationContext(), "Login Successful", Toast.LENGTH_LONG).show();
+                                    Log.d("aaa", "Login successful");
+                                    User user = app.currentUser();
+                                    Log.d("User", String.valueOf(user));
+                                    mongoClient = user.getMongoClient("mongodb-atlas");
+                                    mongoDatabase = mongoClient.getDatabase("northwind");
+                                    mongoCollection = mongoDatabase.getCollection("customers");
+                                    Intent i = new Intent(getApplicationContext(), ProductChoice.class);
+                                    i.putExtra("username", username.toString());
+                                    startActivity(i);
+                                } else {
+                                    Toast.makeText(getApplicationContext(), "Login failed ! Please provide correct username with password", Toast.LENGTH_LONG).show();
+                                }
                             }
-                        }
-                    });
+                        });
+
                 }
             }
         });
