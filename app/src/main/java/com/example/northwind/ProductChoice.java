@@ -2,6 +2,7 @@ package com.example.northwind;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,11 +27,17 @@ public class ProductChoice extends AppCompatActivity {
         CardView card6=findViewById(R.id.card6);
         CardView card7=findViewById(R.id.card7);
         CardView card8=findViewById(R.id.card8);
+
+        String username=getIntent().getStringExtra("username");
+        String password=getIntent().getStringExtra("password");
+
         card1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i= new Intent(getApplicationContext(), Order.class);
                 i.putExtra("category",1);
+                i.putExtra("username",username.toString());
+                i.putExtra("password",password.toString());
                 startActivity(i);
             }
         });
@@ -39,6 +46,8 @@ public class ProductChoice extends AppCompatActivity {
             public void onClick(View view) {
                 Intent i= new Intent(getApplicationContext(), Order.class);
                 i.putExtra("category",2);
+                i.putExtra("username",username.toString());
+                i.putExtra("password",password.toString());
                 startActivity(i);
             }
         });
@@ -47,6 +56,8 @@ public class ProductChoice extends AppCompatActivity {
             public void onClick(View view) {
                 Intent i= new Intent(getApplicationContext(), Order.class);
                 i.putExtra("category",3);
+                i.putExtra("username",username.toString());
+                i.putExtra("password",password.toString());
                 startActivity(i);
             }
         });
@@ -55,6 +66,8 @@ public class ProductChoice extends AppCompatActivity {
             public void onClick(View view) {
                 Intent i= new Intent(getApplicationContext(), Order.class);
                 i.putExtra("category",4);
+                i.putExtra("username",username.toString());
+                i.putExtra("password",password.toString());
                 startActivity(i);
             }
         });
@@ -63,6 +76,8 @@ public class ProductChoice extends AppCompatActivity {
             public void onClick(View view) {
                 Intent i= new Intent(getApplicationContext(), Order.class);
                 i.putExtra("category",5);
+                i.putExtra("username",username.toString());
+                i.putExtra("password",password.toString());
                 startActivity(i);
             }
         });
@@ -71,6 +86,8 @@ public class ProductChoice extends AppCompatActivity {
             public void onClick(View view) {
                 Intent i= new Intent(getApplicationContext(), Order.class);
                 i.putExtra("category",6);
+                i.putExtra("username",username.toString());
+                i.putExtra("password",password.toString());
                 startActivity(i);
             }
         });
@@ -79,6 +96,8 @@ public class ProductChoice extends AppCompatActivity {
             public void onClick(View view) {
                 Intent i= new Intent(getApplicationContext(), Order.class);
                 i.putExtra("category",7);
+                i.putExtra("username",username.toString());
+                i.putExtra("password",password.toString());
                 startActivity(i);
             }
         });
@@ -87,6 +106,8 @@ public class ProductChoice extends AppCompatActivity {
             public void onClick(View view) {
                 Intent i= new Intent(getApplicationContext(), Order.class);
                 i.putExtra("category",8);
+                i.putExtra("username",username.toString());
+                i.putExtra("password",password.toString());
                 startActivity(i);
             }
         });
@@ -99,8 +120,10 @@ public class ProductChoice extends AppCompatActivity {
                     case R.id.order:
                         return true;
                     case R.id.cart:
-
-                        startActivity(new Intent(getApplicationContext(), Cart.class));
+                        Intent i = new Intent(getApplicationContext(), Cart.class);
+                        i.putExtra("username", username.toString());
+                        i.putExtra("password",password.toString());
+                        startActivity(i);
                         overridePendingTransition(0,0);
 
                         return true;

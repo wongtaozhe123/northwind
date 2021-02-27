@@ -94,8 +94,10 @@ String ed_username = username.getText().toString();
                                     mongoDatabase = mongoClient.getDatabase("northwind");
                                     mongoCollection = mongoDatabase.getCollection("customers");
                                     Intent i = new Intent(getApplicationContext(), ProductChoice.class);
-                                    i.putExtra("username", username.toString());
+                                    i.putExtra("username", username.getText().toString());
+                                    i.putExtra("password",password.getText().toString());
                                     startActivity(i);
+                                    finish();
                                 } else {
                                     Toast.makeText(getApplicationContext(), "Login failed ! Please provide correct username with password", Toast.LENGTH_LONG).show();
                                 }

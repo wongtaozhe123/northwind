@@ -11,7 +11,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -36,7 +35,7 @@ import io.realm.mongodb.mongo.MongoCollection;
 import io.realm.mongodb.mongo.MongoDatabase;
 import io.realm.mongodb.mongo.iterable.MongoCursor;
 
-public class Cart extends AppCompatActivity{
+public class History extends AppCompatActivity{
     MongoClient mongoClient;
     MongoDatabase mongoDatabase;
     MongoCollection<Document> mongoCollection;
@@ -46,8 +45,7 @@ public class Cart extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.cart);
-        final double[] sum = {0};
+        setContentView(R.layout.history);
 
         Realm.init(this);
         App app=new App(new AppConfiguration.Builder("northwind-noimz").build());
@@ -58,11 +56,9 @@ public class Cart extends AppCompatActivity{
 
         String username=getIntent().getStringExtra("username");
         String password=getIntent().getStringExtra("password");
-        ListView cartListView=findViewById(R.id.cartListView);
+        ListView historyListView=findViewById(R.id.historyListView);
         ProgressBar progressBarCart=findViewById(R.id.progressBarCart);
-        Button historyButton=findViewById(R.id.history);
-        TextView totaltxt=findViewById(R.id.totalSum);
-        Button toPayment=findViewById(R.id.toPayment);
+        Button unpaidButton = findViewById(R.id.unpaid);
 
         Credentials credentials=Credentials.emailPassword("wongtaozhelgd@gmail.com","taozhe");
         app.loginAsync(credentials, new App.Callback<User>(){
@@ -74,7 +70,7 @@ public class Cart extends AppCompatActivity{
                     mongoClient = user.getMongoClient("mongodb-atlas");
                     mongoDatabase=mongoClient.getDatabase("northwind");
                     mongoCollection=mongoDatabase.getCollection("cart");
-                    Document queryFilter=new Document().append("username",username).append("status","unpaid");
+                    Document queryFilter=new Document().append("username",username).append("status","paid");
 
                     RealmResultTask<MongoCursor<Document>> findTask=mongoCollection.find(queryFilter).iterator();
                     findTask.getAsync(task->{
@@ -89,45 +85,37 @@ public class Cart extends AppCompatActivity{
 //                                        Log.d("aaa",currentDoc.toString());
                                     arrayList.add(currentDoc.getString("food"));
                                     arrayList1.add(currentDoc.getInteger("price"));
-                                    sum[0] +=currentDoc.getInteger("price");
                                 }
                             }
                             try{
-                                ProgramAdapter programAdapter=new ProgramAdapter(Cart.this,arrayList,arrayList1,userInfo,action);
-                                cartListView.setAdapter(programAdapter);
-                                totaltxt.setText("total: RM"+sum[0]);
+                                ProgramAdapter programAdapter=new ProgramAdapter(History.this,arrayList,arrayList1,userInfo,action);
+                                historyListView.setAdapter(programAdapter);
                                 progressBarCart.setVisibility(View.INVISIBLE);
+//                                progressBar.setVisibility(View.INVISIBLE);
                             }catch (Exception e){
                                 Log.d("aaa",e.toString());
                             }
                         }
                         else{
                             Log.d("aaa",task.getError().toString());
-                            Toast.makeText(Cart.this,task.getError().toString(),Toast.LENGTH_SHORT).show();
+                            Toast.makeText(History.this,task.getError().toString(),Toast.LENGTH_SHORT).show();
                         }
                     });
                 }else{
-                    Toast.makeText(Cart.this,result.getError().toString(),Toast.LENGTH_SHORT).show();
+                    Toast.makeText(History.this,result.getError().toString(),Toast.LENGTH_SHORT).show();
                 }
                 progressBarCart.setVisibility(View.INVISIBLE);
             }
         });
 
-        historyButton.setOnClickListener(new View.OnClickListener() {
+        unpaidButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i=new Intent(getApplicationContext(),History.class);
+                Intent i=new Intent(getApplicationContext(),Cart.class);
                 i.putExtra("username", username.toString());
                 i.putExtra("password",password.toString());
                 startActivity(i);
                 finish();
-            }
-        });
-
-        toPayment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
             }
         });
 

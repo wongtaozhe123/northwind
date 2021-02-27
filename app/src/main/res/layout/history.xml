@@ -77,17 +77,6 @@
             app:layout_constraintHorizontal_weight="1" />
 
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:text="Tap once to remove item from cart"
-        android:textAlignment="center"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toTopOf="@+id/cartListView"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_nav_bar"
         android:layout_width="match_parent"
@@ -98,54 +87,15 @@
         app:menu="@menu/menu_navigation" />
 
     <ListView
-        android:id="@+id/cartListView"
+        android:id="@+id/historyListView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="225dp"
-        android:layout_marginBottom="110dp"
+        android:layout_marginTop="200dp"
+        android:layout_marginBottom="50dp"
         app:layout_constraintBottom_toTopOf="@id/bottom_nav_bar"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout"
         android:background="@color/white"
         android:textColor="@color/white"/>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:foregroundGravity="bottom"
-        android:gravity="bottom"
-        app:layout_constraintBottom_toTopOf="@id/bottom_nav_bar"
-        app:layout_constraintTop_toBottomOf="@id/linearLayout"
-        app:layout_constraintVertical_bias="1.0"
-        android:background="@color/white"
-        tools:layout_editor_absoluteX="16dp">
-
-        <TextView
-            android:id="@+id/totalSum"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="10dp"
-            android:inputType="number"
-            android:padding="10dp"
-            android:text="none"
-            android:textColor="@color/black"
-            android:textSize="20dp" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_marginStart="30dp"
-            android:layout_marginEnd="30dp"
-            android:layout_toEndOf="@+id/totalSum"
-            android:background="@color/black"
-            android:id="@+id/toPayment"
-            android:text="Proceed to Payment"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:textColor="@color/white" />
-    </RelativeLayout>
 
     <ProgressBar
         android:id="@+id/progressBarCart"
@@ -159,6 +109,6 @@
         app:layout_constraintBottom_toTopOf="@+id/bottom_nav_bar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
