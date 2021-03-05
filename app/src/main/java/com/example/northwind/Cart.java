@@ -21,6 +21,19 @@ import androidx.cardview.widget.CardView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.bson.Document;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
+
+import com.razorpay.Checkout;
+import com.razorpay.PaymentResultListener;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -36,7 +49,9 @@ import io.realm.mongodb.mongo.MongoCollection;
 import io.realm.mongodb.mongo.MongoDatabase;
 import io.realm.mongodb.mongo.iterable.MongoCursor;
 
-public class Cart extends AppCompatActivity{
+
+
+public class Cart extends AppCompatActivity implements PaymentResultListener {
     MongoClient mongoClient;
     MongoDatabase mongoDatabase;
     MongoCollection<Document> mongoCollection;
@@ -48,6 +63,7 @@ public class Cart extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.cart);
         final double[] sum = {0};
+
 
         Realm.init(this);
         App app=new App(new AppConfiguration.Builder("northwind-noimz").build());
@@ -63,6 +79,7 @@ public class Cart extends AppCompatActivity{
         Button historyButton=findViewById(R.id.history);
         TextView totaltxt=findViewById(R.id.totalSum);
         Button toPayment=findViewById(R.id.toPayment);
+
 
         Credentials credentials=Credentials.emailPassword("wongtaozhelgd@gmail.com","taozhe");
         app.loginAsync(credentials, new App.Callback<User>(){
@@ -127,7 +144,36 @@ public class Cart extends AppCompatActivity{
         toPayment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String sAmount = String.valueOf(sum[0]);
+                int amount = Math.round(Float.parseFloat(sAmount)*100);
+                //Initialize razorpay checkout
+                Checkout checkout = new Checkout();
+                //Set key id
+                checkout.setKeyID("rzp_test_ZWEEVpK7gsjGGu");
+                //set image
 
+                //initialize json object
+                JSONObject object = new JSONObject();
+                try{
+                    //put name
+                    object.put("name", "Android Coding");
+                    //put description
+                    object.put("description", "Test Payment");
+                    //put theme color
+                    object.put("theme.color", "#0093DD");
+                    //put currency unit
+                    object.put("currency", "INR");
+                    //put amount
+                    object.put("amount", amount);
+                    //put mobile number
+                    object.put("prefill.contact", "9876543210");
+                    //put email
+                    object.put("prefill.email", "androidcoding@rzp.com");
+                    //open razorpay checkout activity
+                    checkout.open(Cart.this,object);
+                }catch(JSONException e){
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -150,5 +196,24 @@ public class Cart extends AppCompatActivity{
                 return false;
             }
         });
+    }
+
+    @Override
+    public void onPaymentSuccess(String s) {
+        //initialize aleart dialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        //set title
+        builder.setTitle("Payment ID");
+        //set message
+        builder.setMessage(s);
+        //show alert dialog
+        builder.show();
+    }
+
+    @Override
+    public void onPaymentError(int i, String s) {
+        //display toast
+        Toast.makeText(getApplicationContext()
+                ,s, Toast.LENGTH_SHORT).show();
     }
 }
