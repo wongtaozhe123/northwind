@@ -53,6 +53,9 @@ public class History extends AppCompatActivity{
         ArrayList<Double> arrayList1=new ArrayList();
         ArrayList<String> userInfo=new ArrayList<>();
         ArrayList<String> action=new ArrayList<>();
+        int[] foodImg = {
+                R.drawable.food,R.drawable.food2,R.drawable.food3,R.drawable.food4,R.drawable.food5,R.drawable.food6,R.drawable.food7,R.drawable.food8
+        };
 
         String username=getIntent().getStringExtra("username");
         String password=getIntent().getStringExtra("password");
@@ -88,7 +91,7 @@ public class History extends AppCompatActivity{
                                 }
                             }
                             try{
-                                ProgramAdapter programAdapter=new ProgramAdapter(History.this,arrayList,arrayList1,userInfo,action);
+                                ProgramAdapter programAdapter=new ProgramAdapter(History.this,arrayList,arrayList1,userInfo,action,foodImg);
                                 historyListView.setAdapter(programAdapter);
                                 progressBarCart.setVisibility(View.INVISIBLE);
 //                                progressBar.setVisibility(View.INVISIBLE);

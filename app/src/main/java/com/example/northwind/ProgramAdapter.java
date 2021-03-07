@@ -33,14 +33,16 @@ public class ProgramAdapter extends ArrayAdapter<String> {
     ArrayList<String> userInfo;
     ArrayList<String> action;
     ArrayList<String> strings;
+    int[] foodImg;
     int temp=0;
-    public ProgramAdapter(Context context, ArrayList<String> foodName, ArrayList<Double> foodPrice, ArrayList<String> userInfo, ArrayList<String> action) {
+    public ProgramAdapter(Context context, ArrayList<String> foodName, ArrayList<Double> foodPrice, ArrayList<String> userInfo, ArrayList<String> action, int[] foodImg) {
         super(context, R.layout.single_item,R.id.foodName,foodName);
         this.context=context;
         this.foodName=foodName;
         this.foodPrice=foodPrice;
         this.userInfo=userInfo;
         this.action=action;
+        this.foodImg=foodImg;
     }
 
     @Override
@@ -56,6 +58,7 @@ public class ProgramAdapter extends ArrayAdapter<String> {
         else{
             holder= (ProgramViewHolder) singleItem.getTag();
         }
+//        holder.foodImage.setImageResource(foodImg[position]);
         holder.foodName.setText("~ "+foodName.get(position)+" ~");
         holder.foodPrice.setText("~ RM"+ foodPrice.get(position) +" ~");
         singleItem.setOnClickListener(new View.OnClickListener(){
@@ -100,7 +103,6 @@ public class ProgramAdapter extends ArrayAdapter<String> {
                                         i.putExtra("username", userInfo.get(0));
                                         i.putExtra("password",userInfo.get(1));
                                         context.startActivity(i);
-//                                        ((Activity) context.getApplicationContext()).recreate();
 //                                        ((Activity) context.getApplicationContext()).finish();
                                     }
                                     else{

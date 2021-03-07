@@ -57,6 +57,9 @@ public class Cart extends AppCompatActivity{
         ArrayList<Double> arrayList1=new ArrayList();
         ArrayList<String> userInfo=new ArrayList<>();
         ArrayList<String> action=new ArrayList<>();
+        int[] foodImg = {
+                R.drawable.food,R.drawable.food2,R.drawable.food3,R.drawable.food4,R.drawable.food5,R.drawable.food6,R.drawable.food7,R.drawable.food8
+        };
 
         String username=getIntent().getStringExtra("username");
         String password=getIntent().getStringExtra("password");
@@ -95,7 +98,7 @@ public class Cart extends AppCompatActivity{
                                 }
                             }
                             try{
-                                ProgramAdapter programAdapter=new ProgramAdapter(Cart.this,arrayList,arrayList1,userInfo,action);
+                                ProgramAdapter programAdapter=new ProgramAdapter(Cart.this,arrayList,arrayList1,userInfo,action,foodImg);
                                 cartListView.setAdapter(programAdapter);
                                 totaltxt.setText("total: RM"+df2.format(sum[0]));
                                 progressBarCart.setVisibility(View.INVISIBLE);
