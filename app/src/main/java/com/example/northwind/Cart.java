@@ -23,6 +23,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import org.bson.Document;
 
 import java.lang.reflect.Array;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import io.realm.Realm;
@@ -48,6 +49,7 @@ public class Cart extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.cart);
         final double[] sum = {0};
+        DecimalFormat df2 = new DecimalFormat("#.##");
 
         Realm.init(this);
         App app=new App(new AppConfiguration.Builder("northwind-noimz").build());
@@ -95,7 +97,7 @@ public class Cart extends AppCompatActivity{
                             try{
                                 ProgramAdapter programAdapter=new ProgramAdapter(Cart.this,arrayList,arrayList1,userInfo,action);
                                 cartListView.setAdapter(programAdapter);
-                                totaltxt.setText("total: RM"+sum[0]);
+                                totaltxt.setText("total: RM"+df2.format(sum[0]));
                                 progressBarCart.setVisibility(View.INVISIBLE);
                             }catch (Exception e){
                                 Log.d("aaa",e.toString());
