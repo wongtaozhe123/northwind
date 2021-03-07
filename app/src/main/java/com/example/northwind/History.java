@@ -50,9 +50,12 @@ public class History extends AppCompatActivity{
         Realm.init(this);
         App app=new App(new AppConfiguration.Builder("northwind-noimz").build());
         ArrayList<String> arrayList=new ArrayList<>();
-        ArrayList<Integer> arrayList1=new ArrayList();
+        ArrayList<Double> arrayList1=new ArrayList();
         ArrayList<String> userInfo=new ArrayList<>();
         ArrayList<String> action=new ArrayList<>();
+        int[] foodImg = {
+                R.drawable.food,R.drawable.food2,R.drawable.food3,R.drawable.food4,R.drawable.food5,R.drawable.food6,R.drawable.food7,R.drawable.food8
+        };
 
         String username=getIntent().getStringExtra("username");
         String password=getIntent().getStringExtra("password");
@@ -84,11 +87,11 @@ public class History extends AppCompatActivity{
                                 if(currentDoc.getString("food")!=null){
 //                                        Log.d("aaa",currentDoc.toString());
                                     arrayList.add(currentDoc.getString("food"));
-                                    arrayList1.add(currentDoc.getInteger("price"));
+                                    arrayList1.add(currentDoc.getDouble("price"));
                                 }
                             }
                             try{
-                                ProgramAdapter programAdapter=new ProgramAdapter(History.this,arrayList,arrayList1,userInfo,action);
+                                ProgramAdapter programAdapter=new ProgramAdapter(History.this,arrayList,arrayList1,userInfo,action,foodImg);
                                 historyListView.setAdapter(programAdapter);
                                 progressBarCart.setVisibility(View.INVISIBLE);
 //                                progressBar.setVisibility(View.INVISIBLE);

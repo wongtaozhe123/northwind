@@ -36,6 +36,7 @@ import org.json.JSONObject;
 
 
 import java.lang.reflect.Array;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import io.realm.Realm;
@@ -63,14 +64,18 @@ public class Cart extends AppCompatActivity implements PaymentResultListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.cart);
         final double[] sum = {0};
+        DecimalFormat df2 = new DecimalFormat("#.##");
 
 
         Realm.init(this);
         App app=new App(new AppConfiguration.Builder("northwind-noimz").build());
         ArrayList<String> arrayList=new ArrayList<>();
-        ArrayList<Integer> arrayList1=new ArrayList();
+        ArrayList<Double> arrayList1=new ArrayList();
         ArrayList<String> userInfo=new ArrayList<>();
         ArrayList<String> action=new ArrayList<>();
+        int[] foodImg = {
+                R.drawable.food,R.drawable.food2,R.drawable.food3,R.drawable.food4,R.drawable.food5,R.drawable.food6,R.drawable.food7,R.drawable.food8
+        };
 
         String username=getIntent().getStringExtra("username");
         String password=getIntent().getStringExtra("password");
@@ -105,14 +110,14 @@ public class Cart extends AppCompatActivity implements PaymentResultListener {
                                 if(currentDoc.getString("food")!=null){
 //                                        Log.d("aaa",currentDoc.toString());
                                     arrayList.add(currentDoc.getString("food"));
-                                    arrayList1.add(currentDoc.getInteger("price"));
-                                    sum[0] +=currentDoc.getInteger("price");
+                                    arrayList1.add(currentDoc.getDouble("price"));
+                                    sum[0] +=currentDoc.getDouble("price");
                                 }
                             }
                             try{
-                                ProgramAdapter programAdapter=new ProgramAdapter(Cart.this,arrayList,arrayList1,userInfo,action);
+                                ProgramAdapter programAdapter=new ProgramAdapter(Cart.this,arrayList,arrayList1,userInfo,action,foodImg);
                                 cartListView.setAdapter(programAdapter);
-                                totaltxt.setText("total: RM"+sum[0]);
+                                totaltxt.setText("total: RM"+df2.format(sum[0]));
                                 progressBarCart.setVisibility(View.INVISIBLE);
                             }catch (Exception e){
                                 Log.d("aaa",e.toString());

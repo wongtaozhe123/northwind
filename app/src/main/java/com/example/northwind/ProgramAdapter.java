@@ -29,18 +29,20 @@ import io.realm.mongodb.mongo.iterable.MongoCursor;
 public class ProgramAdapter extends ArrayAdapter<String> {
     Context context;
     ArrayList<String> foodName;
-    ArrayList<Integer> foodPrice;
+    ArrayList<Double> foodPrice;
     ArrayList<String> userInfo;
     ArrayList<String> action;
     ArrayList<String> strings;
-
-    public ProgramAdapter(Context context, ArrayList<String> foodName, ArrayList<Integer> foodPrice, ArrayList<String> userInfo, ArrayList<String> action) {
+    int[] foodImg;
+    int temp=0;
+    public ProgramAdapter(Context context, ArrayList<String> foodName, ArrayList<Double> foodPrice, ArrayList<String> userInfo, ArrayList<String> action, int[] foodImg) {
         super(context, R.layout.single_item,R.id.foodName,foodName);
         this.context=context;
         this.foodName=foodName;
         this.foodPrice=foodPrice;
         this.userInfo=userInfo;
         this.action=action;
+        this.foodImg=foodImg;
     }
 
     @Override
@@ -56,6 +58,7 @@ public class ProgramAdapter extends ArrayAdapter<String> {
         else{
             holder= (ProgramViewHolder) singleItem.getTag();
         }
+//        holder.foodImage.setImageResource(foodImg[position]);
         holder.foodName.setText("~ "+foodName.get(position)+" ~");
         holder.foodPrice.setText("~ RM"+ foodPrice.get(position) +" ~");
         singleItem.setOnClickListener(new View.OnClickListener(){
@@ -92,6 +95,7 @@ public class ProgramAdapter extends ArrayAdapter<String> {
                                 MongoDatabase mongoDatabase=mongoClient.getDatabase("northwind");
                                 MongoCollection<Document> mongoCollection=mongoDatabase.getCollection("cart");
                                 Document document=new Document().append("username",userInfo.get(0)).append("food",foodName.get(position)).append("status","unpaid");
+
                                 mongoCollection.deleteOne(document).getAsync(task -> {
                                     if(task.isSuccess()){
                                         Toast.makeText(getContext(),"Successfully deleted",Toast.LENGTH_SHORT).show();
@@ -99,7 +103,7 @@ public class ProgramAdapter extends ArrayAdapter<String> {
                                         i.putExtra("username", userInfo.get(0));
                                         i.putExtra("password",userInfo.get(1));
                                         context.startActivity(i);
-                                        ((Activity) context.getApplicationContext()).finish();
+//                                        ((Activity) context.getApplicationContext()).finish();
                                     }
                                     else{
                                         Log.d("aaa",task.getError().toString());

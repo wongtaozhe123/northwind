@@ -35,9 +35,13 @@ public class Order extends AppCompatActivity{
         Realm.init(this);
         App app=new App(new AppConfiguration.Builder(Appid).build());
         ArrayList<String> arrayList=new ArrayList<>();
-        ArrayList<Integer> arrayList1=new ArrayList();
+        ArrayList<Double> arrayList1=new ArrayList();
         ArrayList<String> userInfo=new ArrayList<>();
         ArrayList<String> action=new ArrayList<>();
+        int[] foodImg = {
+                R.drawable.food,R.drawable.food2,R.drawable.food3,R.drawable.food4,R.drawable.food5,R.drawable.food6,R.drawable.food7,R.drawable.food8
+        };
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.order);
 
@@ -57,8 +61,8 @@ public class Order extends AppCompatActivity{
                         user=app.currentUser();
                         mongoClient = user.getMongoClient("mongodb-atlas");
                         mongoDatabase=mongoClient.getDatabase("northwind");
-                        mongoCollection=mongoDatabase.getCollection("customers");
-                        Document queryFilter=new Document().append("id",4).append("name","Love");
+                        mongoCollection=mongoDatabase.getCollection("products");
+                        Document queryFilter=new Document().append("categoryID",category);
 
                         RealmResultTask<MongoCursor<Document>> findTask=mongoCollection.find(queryFilter).iterator();
                         findTask.getAsync(task->{
@@ -70,16 +74,16 @@ public class Order extends AppCompatActivity{
                                 while(results.hasNext()){
                                     Document currentDoc=results.next();
 
-                                    if(currentDoc.getString("name")!=null){
+                                    if(currentDoc.getString("productName")!=null){
 //                                        Log.d("aaa",currentDoc.toString());
-                                        arrayList.add(currentDoc.getString("name"));
-                                        arrayList1.add(currentDoc.getInteger("id"));
+                                        arrayList.add(currentDoc.getString("productName"));
+                                        arrayList1.add(currentDoc.getDouble("unitPrice"));
                                     }
                                 }
                                 try{
 //                                    ArrayAdapter<String> arrayAdapter=new ArrayAdapter<String>(Order.this, android.R.layout.simple_list_item_1,arrayList);
 //                                    listView.setAdapter(new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, arrayList));
-                                    ProgramAdapter programAdapter=new ProgramAdapter(Order.this,arrayList,arrayList1,userInfo,action);
+                                    ProgramAdapter programAdapter=new ProgramAdapter(Order.this,arrayList,arrayList1,userInfo,action,foodImg);
                                     listView.setAdapter(programAdapter);
                                     progressBar.setVisibility(View.INVISIBLE);
                                 }catch (Exception e){
