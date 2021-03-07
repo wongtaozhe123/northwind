@@ -35,7 +35,7 @@ public class Order extends AppCompatActivity{
         Realm.init(this);
         App app=new App(new AppConfiguration.Builder(Appid).build());
         ArrayList<String> arrayList=new ArrayList<>();
-        ArrayList<Integer> arrayList1=new ArrayList();
+        ArrayList<Double> arrayList1=new ArrayList();
         ArrayList<String> userInfo=new ArrayList<>();
         ArrayList<String> action=new ArrayList<>();
         super.onCreate(savedInstanceState);
@@ -57,8 +57,8 @@ public class Order extends AppCompatActivity{
                         user=app.currentUser();
                         mongoClient = user.getMongoClient("mongodb-atlas");
                         mongoDatabase=mongoClient.getDatabase("northwind");
-                        mongoCollection=mongoDatabase.getCollection("customers");
-                        Document queryFilter=new Document().append("id",4).append("name","Love");
+                        mongoCollection=mongoDatabase.getCollection("products");
+                        Document queryFilter=new Document().append("categoryID",category);
 
                         RealmResultTask<MongoCursor<Document>> findTask=mongoCollection.find(queryFilter).iterator();
                         findTask.getAsync(task->{
@@ -70,10 +70,10 @@ public class Order extends AppCompatActivity{
                                 while(results.hasNext()){
                                     Document currentDoc=results.next();
 
-                                    if(currentDoc.getString("name")!=null){
+                                    if(currentDoc.getString("productName")!=null){
 //                                        Log.d("aaa",currentDoc.toString());
-                                        arrayList.add(currentDoc.getString("name"));
-                                        arrayList1.add(currentDoc.getInteger("id"));
+                                        arrayList.add(currentDoc.getString("productName"));
+                                        arrayList1.add(currentDoc.getDouble("unitPrice"));
                                     }
                                 }
                                 try{

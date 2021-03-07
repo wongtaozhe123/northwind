@@ -29,12 +29,12 @@ import io.realm.mongodb.mongo.iterable.MongoCursor;
 public class ProgramAdapter extends ArrayAdapter<String> {
     Context context;
     ArrayList<String> foodName;
-    ArrayList<Integer> foodPrice;
+    ArrayList<Double> foodPrice;
     ArrayList<String> userInfo;
     ArrayList<String> action;
     ArrayList<String> strings;
 
-    public ProgramAdapter(Context context, ArrayList<String> foodName, ArrayList<Integer> foodPrice, ArrayList<String> userInfo, ArrayList<String> action) {
+    public ProgramAdapter(Context context, ArrayList<String> foodName, ArrayList<Double> foodPrice, ArrayList<String> userInfo, ArrayList<String> action) {
         super(context, R.layout.single_item,R.id.foodName,foodName);
         this.context=context;
         this.foodName=foodName;

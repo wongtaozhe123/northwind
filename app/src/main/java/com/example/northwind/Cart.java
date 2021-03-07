@@ -52,7 +52,7 @@ public class Cart extends AppCompatActivity{
         Realm.init(this);
         App app=new App(new AppConfiguration.Builder("northwind-noimz").build());
         ArrayList<String> arrayList=new ArrayList<>();
-        ArrayList<Integer> arrayList1=new ArrayList();
+        ArrayList<Double> arrayList1=new ArrayList();
         ArrayList<String> userInfo=new ArrayList<>();
         ArrayList<String> action=new ArrayList<>();
 
@@ -88,8 +88,8 @@ public class Cart extends AppCompatActivity{
                                 if(currentDoc.getString("food")!=null){
 //                                        Log.d("aaa",currentDoc.toString());
                                     arrayList.add(currentDoc.getString("food"));
-                                    arrayList1.add(currentDoc.getInteger("price"));
-                                    sum[0] +=currentDoc.getInteger("price");
+                                    arrayList1.add(currentDoc.getDouble("price"));
+                                    sum[0] +=currentDoc.getDouble("price");
                                 }
                             }
                             try{
