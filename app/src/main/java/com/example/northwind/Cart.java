@@ -31,6 +31,8 @@ import android.widget.Toast;
 
 import com.razorpay.Checkout;
 import com.razorpay.PaymentResultListener;
+
+import org.bson.conversions.Bson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -50,6 +52,10 @@ import io.realm.mongodb.mongo.MongoCollection;
 import io.realm.mongodb.mongo.MongoDatabase;
 import io.realm.mongodb.mongo.iterable.MongoCursor;
 
+import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Updates.combine;
+import static com.mongodb.client.model.Updates.currentDate;
+import static com.mongodb.client.model.Updates.set;
 
 
 public class Cart extends AppCompatActivity implements PaymentResultListener {
@@ -57,10 +63,10 @@ public class Cart extends AppCompatActivity implements PaymentResultListener {
     MongoDatabase mongoDatabase;
     MongoCollection<Document> mongoCollection;
     User user;
+    ArrayList<String> strings = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.cart);
         final double[] sum = {0};
@@ -205,6 +211,10 @@ public class Cart extends AppCompatActivity implements PaymentResultListener {
 
     @Override
     public void onPaymentSuccess(String s) {
+        //updateCart();
+        //realmUpdateCart();
+        Realm.init(this);
+        //testRealm();
         //initialize aleart dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         //set title
@@ -213,6 +223,8 @@ public class Cart extends AppCompatActivity implements PaymentResultListener {
         builder.setMessage(s);
         //show alert dialog
         builder.show();
+
+
     }
 
     @Override
@@ -220,5 +232,132 @@ public class Cart extends AppCompatActivity implements PaymentResultListener {
         //display toast
         Toast.makeText(getApplicationContext()
                 ,s, Toast.LENGTH_SHORT).show();
+    }
+
+    public void updateCart() {
+        //update status unpaid to paid
+        App app=new App(new AppConfiguration.Builder("northwind-noimz").build());
+        Credentials credentials=Credentials.emailPassword("wongtaozhelgd@gmail.com","taozhe");
+        app.loginAsync(credentials, new App.Callback<User>(){
+            @Override
+            public void onResult(App.Result<User> result) {
+                if(result.isSuccess()){
+                    String username=getIntent().getStringExtra("username");
+                    mongoClient = user.getMongoClient("mongodb-atlas");
+                    mongoDatabase=mongoClient.getDatabase("northwind");
+                    MongoCollection<Document> collection = mongoDatabase.getCollection("cart");
+                    collection.updateMany(eq("username", username), combine(set("status", "paid"), currentDate("lastModified")));
+                    Toast.makeText(Cart.this, username.toString(), Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(Cart.this,result.getError().toString(),Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    public void realmUpdateCart() {
+        Realm.init(this);
+        String username = getIntent().getStringExtra("username");
+        Document queryFilter = new Document().append("username", username).append("status", "unpaid");
+        mongoCollection=mongoDatabase.getCollection("cart");
+        RealmResultTask<MongoCursor<Document>> findTask = mongoCollection.find(queryFilter).iterator();
+
+        findTask.getAsync(task -> {
+            if(task.isSuccess())
+            {
+                MongoCursor<Document> results = task.get();
+
+                if(results.hasNext())
+                {
+                    Log.v("FindFunction", "Found Something");
+                    Document result = results.next();
+                    strings = (ArrayList<String>)result.get("status");
+                    if(strings == null)
+                    {
+                        strings = new ArrayList<>();
+                    }
+                    String data = "paid";
+                    strings.add(data);
+                    result.append("status",strings);
+                    mongoCollection.updateOne(queryFilter, result).getAsync(result1 -> {
+                        if(result1.isSuccess())
+                        {
+                            Log.v("UpdateFunction", "Updated Data");
+                        }
+                        else
+                        {
+                            Log.v("UpdatedFunction", "Error"+result1.getError().toString());
+                        }
+                    });
+                }
+                else
+                {
+                    Log.v("FindFunction", "Found Nothing");
+                }
+            }
+            else
+            {
+                Log.v("Error",task.getError().toString());
+            }
+        });
+    }
+
+    public void testRealm() {
+
+        App app=new App(new AppConfiguration.Builder("northwind-noimz").build());
+        Credentials credentials=Credentials.emailPassword("wongtaozhelgd@gmail.com","taozhe");
+        app.loginAsync(credentials, new App.Callback<User>(){
+            @Override
+            public void onResult(App.Result<User> result) {
+                if(result.isSuccess()){
+                    String username = getIntent().getStringExtra("username");
+                    Document queryFilter = new Document().append("username", username).append("status", "unpaid");
+                    mongoCollection=mongoDatabase.getCollection("cart");
+                    RealmResultTask<MongoCursor<Document>> findTask = mongoCollection.find(queryFilter).iterator();
+
+                    findTask.getAsync(task -> {
+                        if(task.isSuccess())
+                        {
+                            Log.v("UpdateFunction", "Updated Data");
+                            MongoCursor<Document> results = task.get();
+
+                            if(results.hasNext())
+                            {
+                                Log.v("FindFunction", "Found Something");
+                                Document resulta = results.next();
+                                strings = (ArrayList<String>)resulta.get("status");
+                                if(strings == null)
+                                {
+                                    strings = new ArrayList<>();
+                                }
+                                String data = "paid";
+                                strings.add(data);
+                                resulta.append("status",strings);
+                                mongoCollection.updateOne(queryFilter, resulta).getAsync(result1 -> {
+                                    if(result1.isSuccess())
+                                    {
+                                        Log.v("UpdateFunction", "Updated Data");
+                                    }
+                                    else
+                                    {
+                                        Log.v("UpdatedFunction", "Error"+result1.getError().toString());
+                                    }
+                                });
+                            }
+                            else
+                            {
+                                Log.v("FindFunction", "Found Nothing");
+                            }
+                        }
+                        else
+                        {
+                            Log.v("Error",task.getError().toString());
+                        }
+                    });
+                }else{
+                    Toast.makeText(Cart.this,result.getError().toString(),Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 }
