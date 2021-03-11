@@ -29,6 +29,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.mongodb.client.model.UpdateOptions;
 import com.razorpay.Checkout;
 import com.razorpay.PaymentResultListener;
 
@@ -63,7 +64,7 @@ public class Cart extends AppCompatActivity implements PaymentResultListener {
     MongoDatabase mongoDatabase;
     MongoCollection<Document> mongoCollection;
     User user;
-    ArrayList<String> strings = new ArrayList<>();
+    String strings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -211,10 +212,7 @@ public class Cart extends AppCompatActivity implements PaymentResultListener {
 
     @Override
     public void onPaymentSuccess(String s) {
-        //updateCart();
-        //realmUpdateCart();
-        Realm.init(this);
-        //testRealm();
+        testRealm();
         //initialize aleart dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         //set title
@@ -255,7 +253,7 @@ public class Cart extends AppCompatActivity implements PaymentResultListener {
         });
     }
 
-    public void realmUpdateCart() {
+    /*public void realmUpdateCart() {
         Realm.init(this);
         String username = getIntent().getStringExtra("username");
         Document queryFilter = new Document().append("username", username).append("status", "unpaid");
@@ -300,7 +298,7 @@ public class Cart extends AppCompatActivity implements PaymentResultListener {
                 Log.v("Error",task.getError().toString());
             }
         });
-    }
+    }*/
 
     public void testRealm() {
 
@@ -310,6 +308,9 @@ public class Cart extends AppCompatActivity implements PaymentResultListener {
             @Override
             public void onResult(App.Result<User> result) {
                 if(result.isSuccess()){
+                    user=app.currentUser();
+                    mongoClient = user.getMongoClient("mongodb-atlas");
+                    mongoDatabase=mongoClient.getDatabase("northwind");
                     String username = getIntent().getStringExtra("username");
                     Document queryFilter = new Document().append("username", username).append("status", "unpaid");
                     mongoCollection=mongoDatabase.getCollection("cart");
@@ -318,22 +319,15 @@ public class Cart extends AppCompatActivity implements PaymentResultListener {
                     findTask.getAsync(task -> {
                         if(task.isSuccess())
                         {
-                            Log.v("UpdateFunction", "Updated Data");
                             MongoCursor<Document> results = task.get();
 
                             if(results.hasNext())
                             {
                                 Log.v("FindFunction", "Found Something");
                                 Document resulta = results.next();
-                                strings = (ArrayList<String>)resulta.get("status");
-                                if(strings == null)
-                                {
-                                    strings = new ArrayList<>();
-                                }
-                                String data = "paid";
-                                strings.add(data);
+                                strings = "paid";
                                 resulta.append("status",strings);
-                                mongoCollection.updateOne(queryFilter, resulta).getAsync(result1 -> {
+                                mongoCollection.updateMany(queryFilter, resulta).getAsync(result1 -> {
                                     if(result1.isSuccess())
                                     {
                                         Log.v("UpdateFunction", "Updated Data");
