@@ -317,6 +317,7 @@ public class Cart extends AppCompatActivity implements PaymentResultListener {
     }*/
 
     public void testRealm() {
+        ProgressBar progressBarCart=findViewById(R.id.progressBarCart);
         String username=getIntent().getStringExtra("username");
         String password=getIntent().getStringExtra("password");
         App app=new App(new AppConfiguration.Builder("northwind-noimz").build());
@@ -325,6 +326,7 @@ public class Cart extends AppCompatActivity implements PaymentResultListener {
             @Override
             public void onResult(App.Result<User> result) {
                 if(result.isSuccess()){
+                    progressBarCart.setVisibility(View.VISIBLE);
                     user=app.currentUser();
                     mongoClient = user.getMongoClient("mongodb-atlas");
                     mongoDatabase=mongoClient.getDatabase("northwind");
@@ -337,7 +339,6 @@ public class Cart extends AppCompatActivity implements PaymentResultListener {
                         if(task.isSuccess())
                         {
                             MongoCursor<Document> results = task.get();
-
                             while(results.hasNext())
                             {
                                 Log.v("FindFunction", "Found Something");
@@ -355,6 +356,7 @@ public class Cart extends AppCompatActivity implements PaymentResultListener {
                                         }
                                     });
                             }
+                            progressBarCart.setVisibility(View.INVISIBLE);
                             Intent i=new Intent(getApplicationContext(),History.class);
                             i.putExtra("username",username);
                             i.putExtra("password",password);
