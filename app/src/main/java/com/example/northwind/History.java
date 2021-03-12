@@ -62,6 +62,7 @@ public class History extends AppCompatActivity{
         ListView historyListView=findViewById(R.id.historyListView);
         ProgressBar progressBarCart=findViewById(R.id.progressBarCart);
         Button unpaidButton = findViewById(R.id.unpaid);
+        Button historyButton=findViewById(R.id.history);
 
         Credentials credentials=Credentials.emailPassword("wongtaozhelgd@gmail.com","taozhe");
         app.loginAsync(credentials, new App.Callback<User>(){
@@ -81,7 +82,7 @@ public class History extends AppCompatActivity{
                             MongoCursor<Document> results=task.get();
                             userInfo.add(username.toString());
                             userInfo.add(password.toString());
-                            action.add("remove");
+                            action.add("non");
                             while(results.hasNext()){
                                 Document currentDoc=results.next();
                                 if(currentDoc.getString("food")!=null){
@@ -108,6 +109,17 @@ public class History extends AppCompatActivity{
                     Toast.makeText(History.this,result.getError().toString(),Toast.LENGTH_SHORT).show();
                 }
                 progressBarCart.setVisibility(View.INVISIBLE);
+            }
+        });
+
+        historyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i=new Intent(getApplicationContext(),History.class);
+                i.putExtra("username", username.toString());
+                i.putExtra("password",password.toString());
+                startActivity(i);
+                finish();
             }
         });
 

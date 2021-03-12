@@ -29,11 +29,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.mongodb.bulk.BulkWriteResult;
 import com.mongodb.client.model.UpdateOptions;
+import com.mongodb.client.model.Updates;
 import com.razorpay.Checkout;
 import com.razorpay.PaymentResultListener;
 
 import org.bson.conversions.Bson;
+import org.bson.types.ObjectId;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -65,6 +68,7 @@ public class Cart extends AppCompatActivity implements PaymentResultListener {
     MongoCollection<Document> mongoCollection;
     User user;
     String strings;
+    ArrayList<String> st=new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +93,7 @@ public class Cart extends AppCompatActivity implements PaymentResultListener {
         ListView cartListView=findViewById(R.id.cartListView);
         ProgressBar progressBarCart=findViewById(R.id.progressBarCart);
         Button historyButton=findViewById(R.id.history);
+        Button cartButton=findViewById(R.id.unpaid);
         TextView totaltxt=findViewById(R.id.totalSum);
         Button toPayment=findViewById(R.id.toPayment);
 
@@ -146,6 +151,17 @@ public class Cart extends AppCompatActivity implements PaymentResultListener {
             @Override
             public void onClick(View view) {
                 Intent i=new Intent(getApplicationContext(),History.class);
+                i.putExtra("username", username.toString());
+                i.putExtra("password",password.toString());
+                startActivity(i);
+                finish();
+            }
+        });
+
+        cartButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i=new Intent(getApplicationContext(),Cart.class);
                 i.putExtra("username", username.toString());
                 i.putExtra("password",password.toString());
                 startActivity(i);
@@ -272,7 +288,7 @@ public class Cart extends AppCompatActivity implements PaymentResultListener {
                     strings = (ArrayList<String>)result.get("status");
                     if(strings == null)
                     {
-                        strings = new ArrayList<>();
+                          = new ArrayList<>();
                     }
                     String data = "paid";
                     strings.add(data);
@@ -301,7 +317,8 @@ public class Cart extends AppCompatActivity implements PaymentResultListener {
     }*/
 
     public void testRealm() {
-
+        String username=getIntent().getStringExtra("username");
+        String password=getIntent().getStringExtra("password");
         App app=new App(new AppConfiguration.Builder("northwind-noimz").build());
         Credentials credentials=Credentials.emailPassword("wongtaozhelgd@gmail.com","taozhe");
         app.loginAsync(credentials, new App.Callback<User>(){
@@ -321,32 +338,38 @@ public class Cart extends AppCompatActivity implements PaymentResultListener {
                         {
                             MongoCursor<Document> results = task.get();
 
-                            if(results.hasNext())
+                            while(results.hasNext())
                             {
                                 Log.v("FindFunction", "Found Something");
                                 Document resulta = results.next();
-                                strings = "paid";
-                                resulta.append("status",strings);
-                                mongoCollection.updateMany(queryFilter, resulta).getAsync(result1 -> {
-                                    if(result1.isSuccess())
-                                    {
-                                        Log.v("UpdateFunction", "Updated Data");
-                                    }
-                                    else
-                                    {
-                                        Log.v("UpdatedFunction", "Error"+result1.getError().toString());
-                                    }
-                                });
+                                resulta.append("status","paid");
+                                Log.d("Update",ObjectId.get().toString());
+                                    mongoCollection.updateOne(queryFilter,resulta).getAsync(result1 -> {
+                                        if(result1.isSuccess())
+                                        {
+                                            Log.v("UpdateFunction", "Updated Data");
+                                        }
+                                        else
+                                        {
+                                            Log.v("UpdateFunction", "Error"+result1.getError().toString());
+                                        }
+                                    });
                             }
-                            else
-                            {
-                                Log.v("FindFunction", "Found Nothing");
-                            }
+                            Intent i=new Intent(getApplicationContext(),History.class);
+                            i.putExtra("username",username);
+                            i.putExtra("password",password);
+                            startActivity(i);
+                            finish();
+//                            else
+//                            {
+//                                Log.v("FindFunction", "Found Nothing");
+//                            }
                         }
                         else
                         {
                             Log.v("Error",task.getError().toString());
                         }
+
                     });
                 }else{
                     Toast.makeText(Cart.this,result.getError().toString(),Toast.LENGTH_SHORT).show();
