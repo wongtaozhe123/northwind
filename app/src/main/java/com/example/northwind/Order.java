@@ -1,20 +1,14 @@
 package com.example.northwind;
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
-import java.util.List;
-
-import com.mongodb.client.MongoClients;
 
 import org.bson.Document;
 
@@ -41,7 +35,13 @@ public class Order extends AppCompatActivity{
         Realm.init(this);
         App app=new App(new AppConfiguration.Builder(Appid).build());
         ArrayList<String> arrayList=new ArrayList<>();
-        ArrayList<Integer> arrayList1=new ArrayList();
+        ArrayList<Double> arrayList1=new ArrayList();
+        ArrayList<String> userInfo=new ArrayList<>();
+        ArrayList<String> action=new ArrayList<>();
+        int[] foodImg = {
+                R.drawable.food,R.drawable.food2,R.drawable.food3,R.drawable.food4,R.drawable.food5,R.drawable.food6,R.drawable.food7,R.drawable.food8
+        };
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.order);
 
@@ -49,7 +49,8 @@ public class Order extends AppCompatActivity{
         ProgressBar progressBar=findViewById(R.id.progressBar);
 
         int category=getIntent().getIntExtra("category",0);
-        Log.d("aaa", String.valueOf(category));
+        String username=getIntent().getStringExtra("username");
+        String password=getIntent().getStringExtra("password");
 
             Credentials credentials=Credentials.emailPassword("wongtaozhelgd@gmail.com","taozhe");
             app.loginAsync(credentials, new App.Callback<User>(){
@@ -60,36 +61,29 @@ public class Order extends AppCompatActivity{
                         user=app.currentUser();
                         mongoClient = user.getMongoClient("mongodb-atlas");
                         mongoDatabase=mongoClient.getDatabase("northwind");
-                        mongoCollection=mongoDatabase.getCollection("customers");
-                        Document queryFilter=new Document().append("id",4);
-//                        mongoCollection.findOne(queryFilter).getAsync(result1 -> {
-//                            if(result1.isSuccess()){
-//                                Log.d("aaa","Retrieve success");
-//                                Log.d("aaa", String.valueOf(result1.get().getInteger("id")));
-//                            }
-//                            else{
-//                                Log.d("aaa","Retrieve error");
-//                                Log.d("aaa",result1.getError().toString());
-//                            }
-//                        });
+                        mongoCollection=mongoDatabase.getCollection("products");
+                        Document queryFilter=new Document().append("categoryID",category);
+
                         RealmResultTask<MongoCursor<Document>> findTask=mongoCollection.find(queryFilter).iterator();
                         findTask.getAsync(task->{
                             if(task.isSuccess()){
                                 MongoCursor<Document> results=task.get();
+                                userInfo.add(username.toString());
+                                userInfo.add(password.toString());
+                                action.add("add");
                                 while(results.hasNext()){
                                     Document currentDoc=results.next();
-                                    if(currentDoc.getString("name")!=null){
+
+                                    if(currentDoc.getString("productName")!=null){
 //                                        Log.d("aaa",currentDoc.toString());
-                                        Log.d("aaa",currentDoc.getString("name"));
-                                        Log.d("aaa", String.valueOf(currentDoc.getInteger("id")));
-                                        arrayList.add(currentDoc.getString("name"));
-                                        arrayList1.add(currentDoc.getInteger("id"));
+                                        arrayList.add(currentDoc.getString("productName"));
+                                        arrayList1.add(currentDoc.getDouble("unitPrice"));
                                     }
                                 }
                                 try{
 //                                    ArrayAdapter<String> arrayAdapter=new ArrayAdapter<String>(Order.this, android.R.layout.simple_list_item_1,arrayList);
 //                                    listView.setAdapter(new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, arrayList));
-                                    ProgramAdapter programAdapter=new ProgramAdapter(Order.this,arrayList,arrayList1);
+                                    ProgramAdapter programAdapter=new ProgramAdapter(Order.this,arrayList,arrayList1,userInfo,action,foodImg);
                                     listView.setAdapter(programAdapter);
                                     progressBar.setVisibility(View.INVISIBLE);
                                 }catch (Exception e){
@@ -109,8 +103,8 @@ public class Order extends AppCompatActivity{
                         });
                     }
                     else{
-                        Log.d("aaa","Login error");
                         Log.d("aaa",result.toString());
+                        Toast.makeText(Order.this,result.toString(),Toast.LENGTH_SHORT).show();
                     }
                 }
             });

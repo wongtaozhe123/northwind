@@ -22,7 +22,7 @@
 
         <activity android:name=".Order"/>
         <activity android:name=".RegisterActivity"/>
-
+        <activity android:name=".History"/>
         <activity android:name=".Cart"/>
         <activity android:name=".Payment"/>
     </application>
